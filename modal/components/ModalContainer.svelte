@@ -48,6 +48,7 @@
             <input
                 id="mini-editor"
                 placeholder="Search with Silversearch"
+                autocomplete="off"
                 bind:value={query}
             />
         </div>
