@@ -30,7 +30,7 @@ async function checkIfInitalized() {
     searchEngine = await SearchEngine.loadFromCache(settings);
 
     if (!searchEngine) {
-        searchEngine = new SearchEngine(settings);
+        searchEngine = await SearchEngine.create(settings);
         await searchEngine.reindex();
     } else if (actionQueue.length) {
         await searchEngine.indexByPaths(actionQueue.filter((action) => action.action === "index").map((action) => action.path));

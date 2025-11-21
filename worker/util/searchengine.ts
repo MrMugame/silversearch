@@ -19,10 +19,18 @@ export class SearchEngine {
     private entryCache: Map<string, CacheEntry>;
     private tokenizers: Tokenizer[];
 
-    constructor(settings: SilversearchSettings) {
-        this.minisearch = new MiniSearch(SearchEngine.getOptions(settings, []));
+    private constructor(settings: SilversearchSettings, tokenizers: Tokenizer[]) {
+        this.minisearch = new MiniSearch(SearchEngine.getOptions(settings, tokenizers));
         this.entryCache = new Map();
-        this.tokenizers = [];
+        this.tokenizers = tokenizers;
+    }
+
+    public static async create(settings: SilversearchSettings): Promise<SearchEngine> {
+        const tokenizers: Tokenizer[] = (await Promise.all(settings.tokenizers.map(async path => {
+            return await Tokenizer.loadFromPath(path);
+        }))).filter(t => t !== null);
+
+        return new SearchEngine(settings, tokenizers);
     }
 
     public static async loadFromCache(settings: SilversearchSettings): Promise<SearchEngine | null> {
@@ -35,11 +43,7 @@ export class SearchEngine {
             return null;
         }
 
-        const searchEngine = new SearchEngine(settings);
-
-        searchEngine.tokenizers = (await Promise.all(settings.tokenizers.map(async path => {
-            return await Tokenizer.loadFromPath(path);
-        }))).filter(t => t !== null);
+        const searchEngine = await this.create(settings);
 
         searchEngine.minisearch = await MiniSearch.loadJSONAsync(cache.minisearch, SearchEngine.getOptions(settings, searchEngine.tokenizers));
 
