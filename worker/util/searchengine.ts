@@ -382,28 +382,8 @@ export class SearchEngine {
         return resultNotes.filter(result => result !== null);
     }
 
-    private runningCacheProcesses: Map<Path, Promise<CacheEntry | null>> = new Map();
     private async getCacheEntries(paths: Path[]): Promise<CacheEntry[]> {
-        // Due to the way deboucing works on the frontend, this can be called
-        // multiple times, this could lead to multiple fetches for e.g. pdfs and
-        // a big traffic jam, because it would render a pdf 10 times. To
-        // mitigate this, we'll cache the promises in the
-        // `runningCacheProcesses` map. This is a little cursed, but increases
-        // the load times quite a bit
-        const promises = paths.map(async path => {
-            if (this.runningCacheProcesses.has(path)) {
-                return this.runningCacheProcesses.get(path);
-            }
-
-            const promise = this.getCacheEntry(path);
-            this.runningCacheProcesses.set(path, promise);
-
-            const entry = await promise;
-            this.runningCacheProcesses.delete(path);
-            return entry;
-        });
-
-        const entries = await Promise.all(promises);
+        const entries = await Promise.all(paths.map(path => this.getCacheEntry(path)));
 
         return entries.filter(entry => !!entry);
     }
