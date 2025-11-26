@@ -45,10 +45,22 @@ config.set {
     -- Increases the fuzziness of the full-text search, options are "0", "1", "2"
     fuzziness = "1",
     -- Puts newlines into the excerpts as opposed to rendering it as one continous string
-    renderLineReturnInExcerpts = true
+    renderLineReturnInExcerpts = true,
+    -- Loads additional tokenizers, see the "Language support" section for more info
+    tokenizers = {
+      ["Library/bob/tokenizer.js"] = {
+        -- These options will be different for different tokenizers
+        maxWordLength = 10
+      }
+    }
   }
 }
 ```
+
+## Language support
+Silversearch makes an effort to support as many languages as possible, which isn't always possible. RTL languages for example aren't really supported by Silverbullet and thus it also doesn't make sense for Silversearch to support them. Most Latin languages work well out of the box, like English, German, French, etc. Other languages like Chinese don't work so well by default, because the tokenization (i.e. the breaking of text into smaller sections, which are later compared, generally "words") is way more complex than in English. This can be improved by installing a purpose build tokenizer. Available tokenizers are lisited below. If you are missing a tokenizer, you can implement your own, the description of the api can be found in the [API](#API) section.
+
+- [Chinese (using `jieba-wasm`)](https://github.com/LelouchHe/silversearch-chinese-tokenizer)
 
 ## API
 To integrate Silversearch with SpaceLua, use the following syscalls:
@@ -72,6 +84,27 @@ type ExtractionResult = {
   // a search result to the correct place.
   navigationMap?: NavigationMap;
 };
+```
+
+Silversearch can load custom tokenizers. These aren't plugs for the sole reason that minisearch can't handle asynchronous tokenization. They are rather ESM Javascript files, which are directly loaded by Silversearch to tokenize content. The generaly api looks as follows
+
+```ts
+export async function init(config: Record<string, any>) {
+  // `config` is the object passed to the settings option of this tokenizer
+  console.log(config);
+
+  // Do Initialization stuff
+}
+
+export function isTokenizable(text: string): boolean {
+  // If this returns true for a given piece of string, Silversearch will call `tokenize()` to get tokens from the text
+  return true;
+}
+
+export function tokenize(text: string): string[] {
+  // This should return the tokenized text
+  return text.split(" ");
+}
 ```
 
 ## LICENSE
