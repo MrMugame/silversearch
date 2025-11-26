@@ -22,21 +22,29 @@ type Action = {
 
 let actionQueue: Action[] = [];
 
-async function checkIfInitalized() {
+let initalizationPromise: Promise<void> | null = null;
+function checkIfInitalizedDebounced(reindex: boolean = true): Promise<void> {
+    if (!initalizationPromise) initalizationPromise = checkIfInitalized(reindex).then(() => { initalizationPromise = null; });
+
+    return initalizationPromise;
+}
+
+async function checkIfInitalized(reindex: boolean): Promise<void> {
     if (searchEngine) return;
 
     const settings = await getPlugConfig();
     // We want to try to load from cache, if that fails create the index and cache it
     searchEngine = await SearchEngine.loadFromCache(settings);
 
-    if (!searchEngine) {
+    if (!searchEngine && reindex) {
         searchEngine = await SearchEngine.create(settings);
         await searchEngine.reindex();
-    } else if (actionQueue.length) {
+    } else if (searchEngine && actionQueue.length) {
         await searchEngine.indexByPaths(actionQueue.filter((action) => action.action === "index").map((action) => action.path));
         await searchEngine.deleteByPaths(actionQueue.filter((action) => action.action === "delete").map((action) => action.path));
-        actionQueue = [];
     }
+
+    actionQueue = [];
 }
 
 export async function openSearch(defaultQuery: string  = ""): Promise<void> {
@@ -54,9 +62,10 @@ export async function startSearch(): Promise<void> {
 }
 
 export async function init(): Promise<void> {
-    // Create it now as all systems should be fully initalized, so we can handle
-    // all the queued paths
-    await checkIfInitalized();
+    // If the cache doesn't exist we don't reindex here to now slow down the
+    // init process, but we will update the cached data if it exists, otherwise
+    // the cache could get slowly out of date if Silversearch isn't used
+    await checkIfInitalizedDebounced(false);
 }
 
 export async function indexPage({ name }: IndexTreeEvent) {
@@ -78,7 +87,7 @@ export async function deleted(path: Path) {
 }
 
 export async function search(searchTerm: string, singleFilePath?: string): Promise<ResultPage[]> {
-    await checkIfInitalized();
+    await checkIfInitalizedDebounced();
 
     const settings = await getPlugConfig();
 
@@ -94,7 +103,7 @@ export async function reindex() {
     await SearchEngine.deleteCache();
     searchEngine = null;
 
-    await checkIfInitalized();
+    await checkIfInitalizedDebounced();
 }
 
 export async function showVersion() {
