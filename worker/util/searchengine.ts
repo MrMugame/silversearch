@@ -45,6 +45,16 @@ export class SearchEngine {
 
         const searchEngine = await this.create(settings);
 
+        // If lock is `true`, the cache was never unlocked again, meaning some
+        // caching operation was canceled. We will just fully reindex the space,
+        // this should rarely happen
+        if (await clientStore.get("silversearch-cache-lock")) {
+            await editor.flashNotification("Silversearch - Last cache failed, reindexing");
+
+            await searchEngine.reindex();
+            return searchEngine;
+        }
+
         searchEngine.minisearch = await MiniSearch.loadJSONAsync(cache.minisearch, SearchEngine.getOptions(settings, searchEngine.tokenizers));
 
         searchEngine.entryCache = new Map(cache.entries)
@@ -56,12 +66,21 @@ export class SearchEngine {
         await clientStore.del("silversearch-cache");
     }
 
+    private cacheWritingTimer: number = 0;
     public async writeToCache(): Promise<void> {
-        await clientStore.set("silversearch-cache", {
-            version: cacheVersion,
-            minisearch: JSON.stringify(this.minisearch),
-            entries: Array.from(this.entryCache.entries()).filter(entry => entry[1].cacheMode === "persistent"),
-        });
+        clearTimeout(this.cacheWritingTimer);
+
+        await clientStore.set("silversearch-cache-lock", true);
+
+        this.cacheWritingTimer = setTimeout(async () => {
+            await clientStore.set("silversearch-cache", {
+                version: cacheVersion,
+                minisearch: JSON.stringify(this.minisearch),
+                entries: Array.from(this.entryCache.entries()).filter(entry => entry[1].cacheMode === "persistent"),
+            });
+
+            await clientStore.set("silversearch-cache-lock", false);
+        }, 250);
     }
 
     public async reindex(): Promise<void> {
