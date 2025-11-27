@@ -6,6 +6,7 @@
     import SearchTips from "./SearchTips.svelte";
     import ResultFile from "./ResultFile.svelte";
     import ResultApology from "./ResultApology.svelte";
+    import SearchApology from "./SearchApology.svelte";
 
     let {
         query = $bindable(),
@@ -120,11 +121,11 @@
         {/each}
 
         {#if !result && !searching && query}
-            <ResultApology type="no-results"/>
+            <ResultApology/>
         {:else if !result && !searching}
             <SearchTips />
         {:else if !result && searching}
-            <ResultApology type="searching"/>
+            <SearchApology/>
         {/if}
     {/snippet}
 </ModalContainer>
