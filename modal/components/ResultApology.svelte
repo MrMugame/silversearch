@@ -1,14 +1,9 @@
 <script lang="ts">
-    const { type }: { type: "no-results" | "searching" } = $props();
 </script>
 
-<div class="silversearch-apology">
-{#if type === "no-results"}
-Silversearch found <code>0</code> results for your query
-{:else if type === "searching"}
-Searching...
-{/if}
-</div>
+<p class="silversearch-apology">
+    Silversearch found <code>0</code> results for your query
+</p>
 
 <style>
     .silversearch-apology {

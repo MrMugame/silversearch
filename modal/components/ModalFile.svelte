@@ -46,7 +46,7 @@
                     syscall(
                         "silversearch.search",
                         query,
-                        currentPath,
+                        { singleFilePath: currentPath, silent: true },
                     ) as Promise<ResultPage[]>,
                     waitPromise.promise,
                 ])

@@ -1,4 +1,4 @@
-import { clientStore, editor, space } from "@silverbulletmd/silverbullet/syscalls";
+import { clientStore, editor, events, space } from "@silverbulletmd/silverbullet/syscalls";
 import { DocumentMeta, PageMeta } from "@silverbulletmd/silverbullet/type/index";
 import { SearchResult, Options, default as MiniSearch } from "minisearch"
 import { Query } from "./query.ts";
@@ -34,6 +34,16 @@ export class SearchEngine {
     }
 
     public static async loadFromCache(settings: SilversearchSettings): Promise<SearchEngine | null> {
+        // If lock is `true`, the cache was never unlocked again, meaning some
+        // caching operation was canceled. We will just fully reindex the space,
+        // this should rarely happen
+        if (await clientStore.get("silversearch-cache-lock")) {
+            await editor.flashNotification("Silversearch - Last cache failed, resetting index");
+            SearchEngine.deleteCache();
+
+            return null;
+        }
+
         const cache = await clientStore.get("silversearch-cache");
 
         if (!cache || cache.version !== cacheVersion || typeof (cache.minisearch) !== "string" || typeof (cache.entries) !== "object") {
@@ -45,16 +55,6 @@ export class SearchEngine {
 
         const searchEngine = await this.create(settings);
 
-        // If lock is `true`, the cache was never unlocked again, meaning some
-        // caching operation was canceled. We will just fully reindex the space,
-        // this should rarely happen
-        if (await clientStore.get("silversearch-cache-lock")) {
-            await editor.flashNotification("Silversearch - Last cache failed, reindexing");
-
-            await searchEngine.reindex();
-            return searchEngine;
-        }
-
         searchEngine.minisearch = await MiniSearch.loadJSONAsync(cache.minisearch, SearchEngine.getOptions(settings, searchEngine.tokenizers));
 
         searchEngine.entryCache = new Map(cache.entries)
@@ -64,6 +64,7 @@ export class SearchEngine {
 
     public static async deleteCache() {
         await clientStore.del("silversearch-cache");
+        await clientStore.del("silversearch-cache-lock");
     }
 
     private cacheWritingTimer: number = 0;
@@ -83,8 +84,8 @@ export class SearchEngine {
         }, 250);
     }
 
-    public async reindex(): Promise<void> {
-        await editor.flashNotification("Silversearch - Reindexing, this can cause performance problems");
+    public async reindex(silent: boolean = false): Promise<void> {
+        if (!silent) await editor.flashNotification("Silversearch - Reindexing, this can cause performance problems");
         this.minisearch.removeAll();
 
         // We could also use listDocuments and listPages, overhead is probably
@@ -93,19 +94,21 @@ export class SearchEngine {
             .map(file => file.name as Path)
             .filter(this.isIndexedPath);
 
-        console.log(`[Silversearch] Indexing ${files.length} pages`);
-        await editor.showProgress(0, "index");
+        if (!silent) console.log(`[Silversearch] Indexing ${files.length} pages`);
+        if (!silent) await editor.showProgress(0, "index");
 
         await this.indexByPaths(
             files,
             (done, all) => {
                 // Don't await, we don't care
-                editor.showProgress(Math.round(done / all * 100), "index");
+                if (!silent) editor.showProgress(Math.round(done / all * 100), "index");
+                clientStore.set("silversearch-progress", { done, all })
             }
         )
 
-        await editor.showProgress();
-        await editor.flashNotification("Silversearch - Full reindex done!");
+        clientStore.del("silversearch-progress");
+        if (!silent) await editor.showProgress();
+        if (!silent) await editor.flashNotification("Silversearch - Full reindex done!");
     }
 
     public async indexByPath(path: Path): Promise<void> {

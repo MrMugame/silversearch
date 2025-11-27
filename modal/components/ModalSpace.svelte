@@ -6,6 +6,7 @@
     import ResultSpace from "./ResultSpace.svelte";
     import SearchTips from "./SearchTips.svelte";
     import ResultApology from "./ResultApology.svelte";
+    import SearchApology from "./SearchApology.svelte";
     import { tick } from "svelte";
 
     let {
@@ -43,7 +44,7 @@
 
         try {
             results = await Promise.race([
-                syscall("silversearch.search", query) as Promise<ResultPage[]>,
+                syscall("silversearch.search", query, { silent: true }) as Promise<ResultPage[]>,
                 waitPromise.promise,
             ]);
             waitPromise = null;
@@ -134,11 +135,12 @@
         {/each}
 
         {#if !results.length && !searching && query}
-            <ResultApology type="no-results"/>
+            <ResultApology/>
         {:else if !results.length && !searching}
             <SearchTips />
         {:else if !results.length && searching}
-            <ResultApology type="searching"/>
+            <!-- <ResultApology type="searching"/> -->
+            <SearchApology />
         {/if}
     {/snippet}
 </ModalContainer>

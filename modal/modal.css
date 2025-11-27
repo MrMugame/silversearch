@@ -1,6 +1,7 @@
 /* Some adjustments cause the enviornment is a little different */
 html, body {
     background: none !important;
+    --silversearch-progress-bar-color: var(--ui-accent-text-color);
 }
 
 * {

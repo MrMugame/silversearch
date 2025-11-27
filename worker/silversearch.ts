@@ -23,13 +23,13 @@ type Action = {
 let actionQueue: Action[] = [];
 
 let initalizationPromise: Promise<void> | null = null;
-function checkIfInitalizedDebounced(reindex: boolean = true): Promise<void> {
-    if (!initalizationPromise) initalizationPromise = checkIfInitalized(reindex).then(() => { initalizationPromise = null; });
+function checkIfInitalizedDebounced(reindex: boolean = true, silent: boolean = false): Promise<void> {
+    if (!initalizationPromise) initalizationPromise = checkIfInitalized(reindex, silent).then(() => { initalizationPromise = null; });
 
     return initalizationPromise;
 }
 
-async function checkIfInitalized(reindex: boolean): Promise<void> {
+async function checkIfInitalized(reindex: boolean, silent: boolean): Promise<void> {
     if (searchEngine) return;
 
     const settings = await getPlugConfig();
@@ -38,7 +38,7 @@ async function checkIfInitalized(reindex: boolean): Promise<void> {
 
     if (!searchEngine && reindex) {
         searchEngine = await SearchEngine.create(settings);
-        await searchEngine.reindex();
+        await searchEngine.reindex(silent);
     } else if (searchEngine && actionQueue.length) {
         await searchEngine.indexByPaths(actionQueue.filter((action) => action.action === "index").map((action) => action.path));
         await searchEngine.deleteByPaths(actionQueue.filter((action) => action.action === "delete").map((action) => action.path));
@@ -86,8 +86,8 @@ export async function deleted(path: Path) {
     else await searchEngine.deleteByPath(path);
 }
 
-export async function search(searchTerm: string, singleFilePath?: string): Promise<ResultPage[]> {
-    await checkIfInitalizedDebounced();
+export async function search(searchTerm: string, options: { singleFilePath?: string, silent?: boolean }): Promise<ResultPage[]> {
+    await checkIfInitalizedDebounced(true, options.silent ?? false);
 
     const settings = await getPlugConfig();
 
@@ -96,7 +96,7 @@ export async function search(searchTerm: string, singleFilePath?: string): Promi
       ignoreArabicDiacritics: settings.ignoreArabicDiacritics,
     });
 
-    return searchEngine!.getSuggestions(query, { singleFilePath });
+    return searchEngine!.getSuggestions(query, { singleFilePath: options.singleFilePath });
 }
 
 export async function reindex() {
