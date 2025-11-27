@@ -65,9 +65,9 @@ Silversearch makes an effort to support as many languages as possible, which isn
 ## API
 To integrate Silversearch with SpaceLua, use the following syscalls:
 
-- `silversearch.search(searchTerm: string, singleFilePath?: string): Promise<ResultPage[]>`: Searches the database using the `searchTerm`, which supports all functions the normal search also supports (e.g. `ext`, etc.). If `singleFilePath` is provided it will only search the provided file. The function will return an array of [`ResultPage`](https://github.com/MrMugame/silversearch/blob/5c4a3b57a8f92336c5e2b1ae29ff9d4b668cd470/shared/global.ts#L6)
+- `silversearch.search(searchTerm: string, options: { singleFilePath?: string, silent?: boolean }): Promise<ResultPage[]>`: Searches the database using the `searchTerm`, which supports all functions the normal search also supports (e.g. `ext`, etc.). If `singleFilePath` is provided it will only search the provided file. If `silent` is true, it will not show any notifications when a reindex happens. The function will return an array of [`ResultPage`](https://github.com/MrMugame/silversearch/blob/5c4a3b57a8f92336c5e2b1ae29ff9d4b668cd470/shared/global.ts#L6)
 - `silversearch.openSearch(defaultQuery: string = ""): void`: This opens the search modal. If a default query is provided it will be inserted into the search field.
-- `silversearch.reindex(): void`: Rebuilds the search database.
+- `silversearch.reindex(silent: boolean = false): void`: Rebuilds the search database. If `silent` is true it will not show any notifications.
 
 When Silversearch indexes a document, it will fire the `silversearch:index` event to query the content. SpaceLua or plugs can respond with content. If nobody responds, the document won't be indexed. If multiple listeners respond, an error will be thrown and the document also won't be indexed. The return type for listeners looks like this
 

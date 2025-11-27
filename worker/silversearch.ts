@@ -99,11 +99,11 @@ export async function search(searchTerm: string, options: { singleFilePath?: str
     return searchEngine!.getSuggestions(query, { singleFilePath: options.singleFilePath });
 }
 
-export async function reindex() {
+export async function reindex(silent: boolean = false) {
     await SearchEngine.deleteCache();
     searchEngine = null;
 
-    await checkIfInitalizedDebounced();
+    await checkIfInitalizedDebounced(true, silent);
 }
 
 export async function showVersion() {
