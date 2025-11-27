@@ -56,7 +56,7 @@
             selectedIndex = 0;
             scrollIntoView();
             searching = false;
-        } catch (_) {}
+        } catch {}
     }
 
     async function openSelected(openInNewTab: boolean) {
