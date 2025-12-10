@@ -1,4 +1,4 @@
-import { clientStore, editor, events, space } from "@silverbulletmd/silverbullet/syscalls";
+import { clientStore, editor, space } from "@silverbulletmd/silverbullet/syscalls";
 import { DocumentMeta, PageMeta } from "@silverbulletmd/silverbullet/type/index";
 import { SearchResult, Options, default as MiniSearch } from "minisearch"
 import { Query } from "./query.ts";
@@ -94,7 +94,7 @@ export class SearchEngine {
             .map(file => file.name as Path)
             .filter(this.isIndexedPath);
 
-        if (!silent) console.log(`[Silversearch] Indexing ${files.length} pages`);
+        console.log(`[Silversearch] Indexing ${files.length} pages`);
         if (!silent) await editor.showProgress(0, "index");
 
         await this.indexByPaths(
@@ -107,8 +107,10 @@ export class SearchEngine {
         )
 
         clientStore.del("silversearch-progress");
-        if (!silent) await editor.showProgress();
-        if (!silent) await editor.flashNotification("Silversearch - Full reindex done!");
+        if (!silent) {
+            await editor.showProgress();
+            await editor.flashNotification("Silversearch - Full reindex done!");
+        }
     }
 
     public async indexByPath(path: Path): Promise<void> {

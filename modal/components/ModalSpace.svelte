@@ -139,7 +139,6 @@
         {:else if !results.length && !searching}
             <SearchTips />
         {:else if !results.length && searching}
-            <!-- <ResultApology type="searching"/> -->
             <SearchApology />
         {/if}
     {/snippet}
