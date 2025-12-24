@@ -379,13 +379,21 @@ export class SearchEngine {
                     )
                 }
 
-                const groupedOffsets = groups.map(group => Math.round(group.at(0)!.offset));
+                const groupedOffsets = groups.map(group => group[0]!.offset);
 
                 excerpts = await Promise.all(groupedOffsets.map(offset => makeExcerpt(note?.content ?? "", offset)));
             } else {
+                const groups = getGroups(matches);
+
+                let offset = 0;
+                if (groups.length) {
+                    const best = groups.reduce((best, current) => current.length > best.length ? current : best);
+                    offset = best[0]!.offset;
+                }
+
                 excerpts = [await makeExcerpt(
                     note.content,
-                    matches[0]?.offset ?? 0
+                    offset
                 )];
             }
 
