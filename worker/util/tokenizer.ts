@@ -4,6 +4,7 @@ import { extractMdLinks } from "md-link-extractor";
 import { BRACKETS_AND_SPACE, SPACE_OR_PUNCTUATION } from "./global.ts";
 import * as v from "@valibot/valibot"
 import { TokenizerConfig, tokenizerConfigSchema } from "./settings.ts";
+import { space } from "@silverbulletmd/silverbullet/syscalls";
 
 type TokenizerImplementation = {
     init: (config: TokenizerConfig) => Promise<void>,
@@ -35,7 +36,13 @@ export class Tokenizer {
     public static async loadFromPath(path: string, config: TokenizerConfig): Promise<Tokenizer | null> {
         let module;
         try {
-            module = await import(`/.fs/${path}`);
+            const code = await space.readDocument(path) as Uint8Array<ArrayBuffer>;
+            const blob = new Blob([code], { type: "text/javascript" });
+            const url = URL.createObjectURL(blob);
+
+            module = await import(url);
+
+            URL.revokeObjectURL(url);
         } catch {
             console.warn(`[Silversearch] Failed to load tokenizer at ${path}. Maybe the path is wrong?`);
             return null;
