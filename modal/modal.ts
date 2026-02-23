@@ -23,9 +23,11 @@ async function mountModal() {
         props: {
             defaultQuery: globalThis.DEFAULT_QUERY ?? "",
             currentPath: await path,
-            isDocumentEditor: (await isDocumentEditor) !== "page",
             customStyles: await customStyles,
-        }
+        },
+        context: new Map([
+            ["isDocumentEditor", (await isDocumentEditor) !== "page"]
+        ])
     });
 }
 

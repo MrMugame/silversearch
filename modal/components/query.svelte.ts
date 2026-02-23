@@ -1,0 +1,1 @@
+export let query = $state({ text: "" });

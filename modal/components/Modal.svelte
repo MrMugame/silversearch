@@ -1,20 +1,22 @@
 <script lang="ts">
+    import { getContext } from "svelte";
     import ModalFile from "./ModalFile.svelte";
     import ModalSpace from "./ModalSpace.svelte";
+    import { query } from "./query.svelte"
 
     const {
         defaultQuery,
         currentPath,
-        isDocumentEditor,
         customStyles
     }: {
         defaultQuery: string;
         currentPath: string;
-        isDocumentEditor: boolean;
         customStyles: string;
     } = $props();
 
-    let query = $state(defaultQuery);
+    const isDocumentEditor = getContext("isDocumentEditor");
+
+    query.text = defaultQuery;
 
     let spaceModal = $state(true);
 
@@ -34,8 +36,8 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div onkeydown={onKeyDown}>
     {#if spaceModal}
-        <ModalSpace bind:query {isDocumentEditor} />
+        <ModalSpace />
     {:else}
-        <ModalFile bind:query {currentPath} />
+        <ModalFile {currentPath} />
     {/if}
 </div>
