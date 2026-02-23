@@ -7,13 +7,21 @@ Silversearch is a plug for [Silverbullet](https://silverbullet.md/) implementing
 Silversearch is part of the [`Std`](https://silverbullet.md/Repositories/Std) repostitory and can by installed using the [Library Manager](https://silverbullet.md/Library%20Manager). You will have to navigate to `Library/Std/Pages/Library Manager` in *your* space and look for Silversearch under the available libraries and press `Install`.
 
 ## Usage
-You can open the search dialog using the `Silversearch: Search` command (`Ctrl-s`/`Cmd-s`). Simply start typing to begin your search, helpful tips for refining your searches will appear at the start. If Silversearch is missing the most up-to-date content, you can rebuild the search database using the `Silversearch: Reindex` command. If you rebuild Silverbullets index, Silversearch will also rebuild, so there is no need to run both commands.
+You can open the search dialog using the `Silversearch: Search` command (`Ctrl-s`/`Cmd-s`). Simply start typing to begin your search, helpful tips for refining your searches will appear at the start. If Silversearch is missing the most up-to-date content, you can rebuild the search database using the `Silversearch: Reindex` command. If you rebuild Silverbullets index, Silversearch will also rebuild, so there is no need to run both commands. The `Silversearch: Clear History` command is used to clear the search history.
 
 Indexing for documents isn't handled by Silversearch, but by other plugs or Space Lua. You can install the following plugs to index specific documents.
 
 - [Silverbullet PDF](https://github.com/MrMugame/silverbullet-pdf): Will index text content from PDFs using PDF.js
 
 If you are missing something and want to write your own indexer, you can look into the [API](#API) section.
+
+## Keybinds
+- `Esc`: Closes Search Modal
+- `Enter`: Opens currently selected result
+- `Alt-Enter`: Inserts a link to the search result at the current cursor
+- `Ctrl-Enter`: Opens the result in a new tab
+- `ArrowUp/ArrowDown`: Moves through the results
+- `Ctrl-ArrowUp/ArrowDown`: Moves through the history
 
 ## Settings
 Silversearch can be configured using SpaceLua
