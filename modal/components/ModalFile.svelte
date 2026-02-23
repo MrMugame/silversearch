@@ -32,8 +32,6 @@
             false,
             openInNewTab,
         );
-
-        await syscall("editor.hidePanel", "modal");
     }
 </script>
 

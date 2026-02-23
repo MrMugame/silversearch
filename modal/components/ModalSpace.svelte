@@ -23,8 +23,6 @@
             false,
             openInNewTab,
         );
-
-        await syscall("editor.hidePanel", "modal");
     }
 
     async function insertLink(result: ResultPage) {

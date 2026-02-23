@@ -14,6 +14,10 @@
         customStyles: string;
     } = $props();
 
+    syscall("clientStore.get", "silversearch-history").then((history: string[] | null) => {
+        query.history = history || [];
+    });
+
     const isDocumentEditor = getContext("isDocumentEditor");
 
     query.text = defaultQuery;

@@ -42,6 +42,10 @@
     let selectedIndex = $state(0);
 
     $effect(() => {
+        if (query.historyIndex >= 0) query.history[query.historyIndex] = query.text;
+    })
+
+    $effect(() => {
         if (query.text) {
             updateResults();
         } else {
@@ -76,23 +80,45 @@
     async function openSelected(openInNewTab: boolean, openSpecial: boolean) {
         if (results.length === 0) return;
 
+        if (query.text) query.history.unshift(query.text);
+        query.history = query.history.filter(x => x);
+        if (query.history.length > 50) query.history.pop();
+        syscall("clientStore.set", "silversearch-history", [...query.history]);
+
         await open(results[selectedIndex], openInNewTab, openSpecial);
+
+        await syscall("editor.hidePanel", "modal");
     }
 
     function onKeyDown(e: KeyboardEvent) {
-        if (e.key === "ArrowUp") selectedIndex--;
-        else if (e.key === "ArrowDown") selectedIndex++;
-        else if (e.key === "Enter") {
+        if (e.key === "Enter") {
             openSelected(e.ctrlKey, e.altKey);
-        } else return;
+            return;
+        }
+
+        if (e.ctrlKey) {
+            const previousIndex = query.historyIndex;
+            if (previousIndex === -1) query.buffer = query.text;
+
+            // We are moving in the history
+            if (e.key === "ArrowUp") query.historyIndex++;
+            else if (e.key === "ArrowDown") query.historyIndex--;
+            else return;
+
+            query.historyIndex = Math.max(-1, Math.min(query.historyIndex, query.history.length - 1))
+
+            if (previousIndex != query.historyIndex && query.historyIndex >= 0) query.text = query.history[query.historyIndex];
+            else if (query.historyIndex === -1) query.text = query.buffer;
+        } else {
+            // We are moving in the results
+            if (e.key === "ArrowUp") selectedIndex--;
+            else if (e.key === "ArrowDown") selectedIndex++;
+            else return;
+
+            selectedIndex = Math.max(0, Math.min(selectedIndex, results.length - 1));
+        }
 
         e.preventDefault();
-
-        selectedIndex = Math.max(
-            0,
-            Math.min(results.length - 1, selectedIndex),
-        );
-
         scrollIntoView();
     }
 

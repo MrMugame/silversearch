@@ -10,6 +10,10 @@ functions:
     path: "./worker/silversearch.ts:showVersion"
     command:
       name: "Silversearch: Version"
+  clearHistory:
+    path: "./worker/silversearch.ts:clearHistory"
+    command:
+      name: "Silversearch: Clear History"
   openSearch:
     path: "./worker/silversearch.ts:openSearch"
     syscall: "silversearch.openSearch"

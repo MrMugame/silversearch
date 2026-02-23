@@ -1,4 +1,4 @@
-import { editor, syscall } from "@silverbulletmd/silverbullet/syscalls";
+import { editor, syscall, clientStore } from "@silverbulletmd/silverbullet/syscalls";
 import { IndexTreeEvent } from "@silverbulletmd/silverbullet/type/event";
 import { Path } from "@silverbulletmd/silverbullet/lib/ref";
 
@@ -108,4 +108,9 @@ export async function reindex(silent: boolean = false) {
 
 export async function showVersion() {
     await editor.flashNotification(`Silversearch - Version ${version}`);
+}
+
+export async function clearHistory() {
+    await editor.flashNotification(`Silversearch - Cleared History`);
+    clientStore.set("silversearch-history", []);
 }
