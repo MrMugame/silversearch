@@ -24,7 +24,7 @@ jobs:
 
       - name: Build step
         run: |
-          npm task build
+          npm run build
 
       - name: Build PLUG.md
         run: |
