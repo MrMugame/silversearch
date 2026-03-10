@@ -13,11 +13,6 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Install Deno
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
@@ -26,11 +21,10 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          deno install
 
       - name: Build step
         run: |
-          deno task build
+          npm task build
 
       - name: Build PLUG.md
         run: |
@@ -53,5 +47,5 @@ jobs:
           tag_name: edge
           body: Automated build from commit ${{ github.sha }}
           files: |
-            silversearch.plug.js
+            worker/silversearch.plug.js
             PLUG.md
