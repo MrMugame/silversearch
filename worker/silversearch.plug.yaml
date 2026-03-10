@@ -1,43 +1,43 @@
 name: silversearch
 functions:
   startSearch:
-    path: "./worker/silversearch.ts:startSearch"
+    path: "./silversearch.ts:startSearch"
     command:
       name: "Silversearch: Search"
       key: Ctrl-s
       mac: Cmd-s
   getVersion:
-    path: "./worker/silversearch.ts:showVersion"
+    path: "./silversearch.ts:showVersion"
     command:
       name: "Silversearch: Version"
   clearHistory:
-    path: "./worker/silversearch.ts:clearHistory"
+    path: "./silversearch.ts:clearHistory"
     command:
       name: "Silversearch: Clear History"
   openSearch:
-    path: "./worker/silversearch.ts:openSearch"
+    path: "./silversearch.ts:openSearch"
     syscall: "silversearch.openSearch"
   reindex:
-    path: "./worker/silversearch.ts:reindex"
+    path: "./silversearch.ts:reindex"
     syscall: "silversearch.reindex"
     command:
       name: "Silversearch: Reindex"
   init:
-    path: "./worker/silversearch.ts:init"
+    path: "./silversearch.ts:init"
     events:
       - "editor:init"
   indexPage:
-    path: "./worker/silversearch.ts:indexPage"
+    path: "./silversearch.ts:indexPage"
     events:
       - "page:index"
   indexDocument:
-    path: "./worker/silversearch.ts:indexDocument"
+    path: "./silversearch.ts:indexDocument"
     events:
       - "document:index"
   deleted:
-    path: "./worker/silversearch.ts:deleted"
+    path: "./silversearch.ts:deleted"
     events:
       - "file:deleted"
   search:
-    path: "./worker/silversearch.ts:search"
+    path: "./silversearch.ts:search"
     syscall: "silversearch.search"

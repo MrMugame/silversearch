@@ -1,9 +1,9 @@
-import { splitCamelCase, splitHyphens } from "./utils.ts";
+import { splitCamelCase, splitHyphens } from "./utils";
 import { QueryCombination } from "minisearch";
 import { extractMdLinks } from "md-link-extractor";
-import { BRACKETS_AND_SPACE, SPACE_OR_PUNCTUATION } from "./global.ts";
-import * as v from "@valibot/valibot"
-import { TokenizerConfig, tokenizerConfigSchema } from "./settings.ts";
+import { BRACKETS_AND_SPACE, SPACE_OR_PUNCTUATION } from "./global";
+import * as v from "valibot"
+import { TokenizerConfig, tokenizerConfigSchema } from "./settings";
 import { space } from "@silverbulletmd/silverbullet/syscalls";
 
 type TokenizerImplementation = {

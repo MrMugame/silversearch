@@ -1,0 +1,14 @@
+{
+    "name": "worker",
+    "private": true,
+    "scripts": {
+        "build": "npx plug-compile silversearch.plug.yaml"
+    },
+    "dependencies": {
+        "@silverbulletmd/silverbullet": ">=2.5.3",
+        "md-link-extractor": "^1.2.0",
+        "minisearch": "^7.2.0",
+        "search-query-parser": "^1.6.0",
+        "valibot": "^1.2.0"
+    }
+}

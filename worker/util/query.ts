@@ -1,4 +1,4 @@
-import { removeDiacritics } from "./utils.ts";
+import { removeDiacritics } from "./utils";
 import { parse } from "search-query-parser";
 
 const keywords = ["ext", "path"] as const;

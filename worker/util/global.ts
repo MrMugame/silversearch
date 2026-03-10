@@ -1,5 +1,5 @@
 import type { Path } from "@silverbulletmd/silverbullet/lib/ref";
-import { NavigationMap } from "../../shared/global.ts";
+import { NavigationMap } from "../../shared/global";
 
 export const excerptBefore = 100;
 export const excerptAfter = 300;

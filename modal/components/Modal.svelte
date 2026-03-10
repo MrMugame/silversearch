@@ -20,6 +20,7 @@
 
     const isDocumentEditor = getContext("isDocumentEditor");
 
+    // svelte-ignore state_referenced_locally
     query.text = defaultQuery;
 
     let spaceModal = $state(true);

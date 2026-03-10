@@ -1,8 +1,8 @@
-import { excerptAfter, excerptBefore } from "./global.ts";
-import { Query } from "./query.ts";
-import { getPlugConfig } from "./settings.ts";
-import { removeDiacritics } from "./utils.ts";
-import { ResultExcerpt, SearchMatch } from "../../shared/global.ts";
+import { excerptAfter, excerptBefore } from "./global";
+import { Query } from "./query";
+import { getPlugConfig } from "./settings";
+import { removeDiacritics } from "./utils";
+import { ResultExcerpt, SearchMatch } from "../../shared/global";
 
 function escapeRegExp(string: string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

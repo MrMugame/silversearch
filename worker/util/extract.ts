@@ -1,11 +1,11 @@
 import { getNameFromPath, isMarkdownPath, Path } from "@silverbulletmd/silverbullet/lib/ref";
 import { space, events } from "@silverbulletmd/silverbullet/syscalls";
 import { DocumentMeta, PageMeta } from "@silverbulletmd/silverbullet/type/index";
-import * as v from "@valibot/valibot"
-import { NavigationMap } from "../../shared/global.ts";
+import * as v from "valibot"
+import { NavigationMap } from "../../shared/global";
 
 export type ExtractionInfo = {
-    // If a document took a lot of processing power to generate,it makes sense to store it across reloads
+    // If a document took a lot of processing power to generate, it makes sense to store it across reloads
     cacheMode: "persistent" | "session";
     navigationMap?: NavigationMap | undefined;
 };
@@ -16,7 +16,7 @@ export type ExtractionResult = {
 
 const extractionResultSchema = v.strictObject({
     content: v.string(),
-    cacheMode: v.optional(v.picklist(["persistent", "session"]), "session"),
+    cacheMode: v.undefinedable(v.picklist(["persistent", "session"]), "session"),
     navigationMap: v.optional(v.array(v.object({ type: v.literal("range"), from: v.number(), to: v.number(), tail: v.string() })))
 });
 

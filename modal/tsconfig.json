@@ -10,7 +10,7 @@
         ],
         "skipLibCheck": true,
         "types": [
-            "./modal/global.d.ts"
+            "./global.d.ts"
         ],
         /* Bundler mode */
         "moduleResolution": "bundler",
@@ -24,9 +24,5 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true
-    },
-    "include": [
-        "modal/*",
-        "modal/components/*"
-    ]
+    }
 }

@@ -1,5 +1,5 @@
 import type { UserConfig } from "vite"
-import fs from 'fs/promises';
+import fs from "fs/promises";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 
 async function wrapFile(path: string) {
@@ -8,13 +8,15 @@ async function wrapFile(path: string) {
     const text = `export default ${JSON.stringify(content)}`;
 
     await fs.writeFile(`${path}.ts`, text);
+
+    await fs.rm(path);
 }
 
 export default {
     build: {
         lib: {
             name: "silversearch",
-            entry: ["modal/modal.ts"],
+            entry: ["modal.ts"],
             formats: ["iife"],
             cssFileName: "modal",
             fileName: "modal"
@@ -25,9 +27,9 @@ export default {
         {
             name: "bundle",
             closeBundle: async () => {
-                // Prepare HTML file by combining it with the css
+                // // Prepare HTML file by combining it with the css
                 const css = await fs.readFile("dist/modal.css", "utf8");
-                const html = await fs.readFile("modal/modal.html", "utf8");
+                const html = await fs.readFile("modal.html", "utf8");
 
                 const content = `<style>${css.replaceAll("\n", "")}</style>\n${html}`;
 

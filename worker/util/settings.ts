@@ -1,6 +1,6 @@
 import { editor, system } from "@silverbulletmd/silverbullet/syscalls";
-import * as v from "@valibot/valibot"
-import { RecencyCutoff } from "./global.ts";
+import * as v from "valibot"
+import { RecencyCutoff } from "./global";
 
 let errorWasShown = false;
 let settings: null | SilversearchSettings = null;

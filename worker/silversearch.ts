@@ -2,14 +2,14 @@ import { editor, syscall, clientStore } from "@silverbulletmd/silverbullet/sysca
 import { IndexTreeEvent } from "@silverbulletmd/silverbullet/type/event";
 import { Path } from "@silverbulletmd/silverbullet/lib/ref";
 
-import script from "../dist/modal.iife.js.ts"
-import html from "../dist/modal.html.ts"
+import script from "../modal/dist/modal.iife.js"
+import html from "../modal/dist/modal.html"
 
-import { SearchEngine } from "./util/searchengine.ts";
-import { Query } from "./util/query.ts";
-import { getPlugConfig } from "./util/settings.ts";
-import { ResultPage } from "../shared/global.ts";
-import { version } from "../dist/version.ts";
+import { SearchEngine } from "./util/searchengine";
+import { Query } from "./util/query";
+import { getPlugConfig } from "./util/settings";
+import { ResultPage } from "../shared/global";
+import { version } from "../version";
 
 // So this will be a global variable in a service worker, so the lifetime is kind of uncertain, especially if
 // we don't have direct access to events, i.e. we can't trust that this exists AT ALL

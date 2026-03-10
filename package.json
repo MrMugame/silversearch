@@ -1,15 +1,11 @@
 {
-    "name": "silversearch",
-    "private": true,
-    "type": "module",
+    "name": "silvesearch",
+    "version": "1.2.3",
+    "workspaces": [
+        "worker",
+        "modal"
+    ],
     "scripts": {
-        "build": "tsc && vite build"
-    },
-    "devDependencies": {
-        "@types/node": "^22.13.4",
-        "typescript": "~5.7.2",
-        "vite": "^6.1.0",
-        "@sveltejs/vite-plugin-svelte": "^5.1.0",
-        "svelte": "^5.34.3"
+        "build": "npm run build --workspace=modal && ./scripts/update_version.sh && npm run build --workspace=worker"
     }
 }

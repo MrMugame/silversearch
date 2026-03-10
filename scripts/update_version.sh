@@ -3,4 +3,4 @@ version=$(git describe --tags --exact-match HEAD --exclude "edge" 2>/dev/null ||
 
 echo "Building the version file with version: $version"
 
-echo "export const version = \"$version\";" > ./dist/version.ts
+echo "export const version = \"$version\";" > ./version.ts

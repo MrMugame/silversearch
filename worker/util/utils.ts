@@ -1,5 +1,5 @@
-import { SearchMatch } from "../../shared/global.ts";
-import { excerptAfter } from "./global.ts";
+import { SearchMatch } from "../../shared/global";
+import { excerptAfter } from "./global";
 
 const japaneseDiacritics = ['\\u30FC', '\\u309A', '\\u3099'];
 const regexpExclude = japaneseDiacritics.join('|');

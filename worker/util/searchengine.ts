@@ -1,16 +1,16 @@
 import { clientStore, editor, space } from "@silverbulletmd/silverbullet/syscalls";
 import { DocumentMeta, PageMeta } from "@silverbulletmd/silverbullet/type/index";
 import { SearchResult, Options, default as MiniSearch } from "minisearch"
-import { Query } from "./query.ts";
-import { getPlugConfig, SilversearchSettings } from "./settings.ts";
-import { tokenizeForIndexing, tokenizeForSearch, Tokenizer } from "./tokenizer.ts";
-import { getGroups, removeDiacritics, removeStrayDiacritics, stripMarkdownCharacters } from "./utils.ts";
-import { CacheEntry, IndexableEntry, RecencyCutoff } from "./global.ts";
-import { getMatches, makeExcerpt } from "./textprocessing.ts";
-import { ResultExcerpt, ResultPage } from "../../shared/global.ts";
+import { Query } from "./query";
+import { getPlugConfig, SilversearchSettings } from "./settings";
+import { tokenizeForIndexing, tokenizeForSearch, Tokenizer } from "./tokenizer";
+import { getGroups, removeDiacritics, removeStrayDiacritics, stripMarkdownCharacters } from "./utils";
+import { CacheEntry, IndexableEntry, RecencyCutoff } from "./global";
+import { getMatches, makeExcerpt } from "./textprocessing";
+import { ResultExcerpt, ResultPage } from "../../shared/global";
 import { getNameFromPath, isMarkdownPath, Path } from "@silverbulletmd/silverbullet/lib/ref";
 import { fileName, folderName } from "@silverbulletmd/silverbullet/lib/resolve";
-import { extractContentByPath, ExtractionInfo } from "./extract.ts";
+import { extractContentByPath, ExtractionInfo } from "./extract";
 
 const cacheVersion = 4;
 
@@ -67,7 +67,7 @@ export class SearchEngine {
         await clientStore.del("silversearch-cache-lock");
     }
 
-    private cacheWritingTimer: number = 0;
+    private cacheWritingTimer: ReturnType<typeof setTimeout>;
     public async writeToCache(): Promise<void> {
         clearTimeout(this.cacheWritingTimer);
 
