@@ -54,6 +54,10 @@ config.set {
     fuzziness = "1",
     -- Puts newlines into the excerpts as opposed to rendering it as one continous string
     renderLineReturnInExcerpts = true,
+    -- You can specify paths to ignore while indexing here using git ignore syntax
+    ignore = {
+      "API/**"
+    },
     -- Loads additional tokenizers, see the "Language support" section for more info
     tokenizers = {
       ["Library/bob/tokenizer.js"] = {

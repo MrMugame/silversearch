@@ -44,6 +44,7 @@ const settingsSchema = v.strictObject({
     splitCamelCase: v.optional(v.boolean(), true),
     fuzziness: v.optional(v.picklist(["0", "1", "2"]), "1"),
     renderLineReturnInExcerpts: v.optional(v.boolean(), true),
+    ignore: v.optional(v.array(v.string()), []),
     tokenizers: v.optional(v.record(v.pipe(v.string(), v.nonEmpty()), v.record(v.string(), tokenizerConfigSchema)), {})
 });
 

@@ -11,6 +11,7 @@ import { ResultExcerpt, ResultPage } from "../../shared/global";
 import { getNameFromPath, isMarkdownPath, Path } from "@silverbulletmd/silverbullet/lib/ref";
 import { fileName, folderName } from "@silverbulletmd/silverbullet/lib/resolve";
 import { extractContentByPath, ExtractionInfo } from "./extract";
+import ignore, { Ignore } from "ignore";
 
 const cacheVersion = 4;
 
@@ -18,11 +19,13 @@ export class SearchEngine {
     private minisearch: MiniSearch;
     private entryCache: Map<string, CacheEntry>;
     private tokenizers: Tokenizer[];
+    private ignore: Ignore;
 
     private constructor(settings: SilversearchSettings, tokenizers: Tokenizer[]) {
         this.minisearch = new MiniSearch(SearchEngine.getOptions(settings, tokenizers));
         this.entryCache = new Map();
         this.tokenizers = tokenizers;
+        this.ignore = ignore().add(settings.ignore);
     }
 
     public static async create(settings: SilversearchSettings): Promise<SearchEngine> {
@@ -121,6 +124,11 @@ export class SearchEngine {
         let done = 0;
 
         for (const path of paths) {
+            if (this.ignore.ignores(path)) {
+                console.log(`[Silversearch] Ignoring ${getNameFromPath(path)}`);
+                continue;
+            }
+
             try {
                 console.log(`[Silversearch] Indexing ${getNameFromPath(path)}`);
 
