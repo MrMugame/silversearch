@@ -54,7 +54,7 @@ config.set {
     fuzziness = "1",
     -- Puts newlines into the excerpts as opposed to rendering it as one continous string
     renderLineReturnInExcerpts = true,
-    -- You can specify paths to ignore while indexing here using git ignore syntax
+    -- You can specify paths to ignore while indexing here using git ignore syntax (You have to Reindex for it to take effect)
     ignore = {
       "API/**"
     },

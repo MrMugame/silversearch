@@ -124,24 +124,25 @@ export class SearchEngine {
         let done = 0;
 
         for (const path of paths) {
-            if (this.ignore.ignores(path)) {
-                console.log(`[Silversearch] Ignoring ${getNameFromPath(path)}`);
-                continue;
-            }
-
             try {
-                console.log(`[Silversearch] Indexing ${getNameFromPath(path)}`);
-
                 // Make sure we don't just get the entry from the cache
                 this.entryCache.delete(path);
 
-                const result = await this.getCacheEntry(path);
-                if (!result) throw null;
+                if (!this.ignore.ignores(path)) {
+                    console.log(`[Silversearch] Indexing ${getNameFromPath(path)}`);
 
-                // TODO: Maybe use addAllAsync?
-                // We can just send the full cache entry here as the rest will just be ignored
-                if (this.minisearch.has(result.path)) this.minisearch.replace(result);
-                else this.minisearch.add(result);
+                    const result = await this.getCacheEntry(path);
+                    if (!result) throw null;
+
+                    // TODO: Maybe use addAllAsync?
+                    // We can just send the full cache entry here as the rest will just be ignored
+                    if (this.minisearch.has(result.path)) this.minisearch.replace(result);
+                    else this.minisearch.add(result);
+                } else {
+                    console.log(`[Silversearch] Ignoring ${getNameFromPath(path)}`);
+
+                    this.minisearch.discard(path);
+                }
 
                 if (progressCallback) progressCallback(++done, paths.length);
             } catch {
@@ -159,6 +160,8 @@ export class SearchEngine {
     public async deleteByPaths(paths: Path[]): Promise<void> {
         for (const path of paths) {
             try {
+                this.entryCache.delete(path)
+
                 this.minisearch.discard(path);
             } catch {
                 console.error("[Silversearch] Something went wrong. Failed to delete page")
