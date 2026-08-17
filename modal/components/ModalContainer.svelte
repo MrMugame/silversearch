@@ -152,14 +152,13 @@
         onkeydown={onKeyDown}
     >
         <label for="mini-editor">Search</label>
-        <div class="sb-mini-editor">
-            <input
-                id="mini-editor"
-                placeholder="Search with Silversearch"
-                autocomplete="off"
-                bind:value={query.text}
-            />
-        </div>
+        <input
+            id="mini-editor"
+            class="sb-input"
+            placeholder="Search with Silversearch"
+            autocomplete="off"
+            bind:value={query.text}
+        />
     </div>
     <div class="sb-help-text">{@render helpText()}</div>
     <div class="sb-result-list" style="max-height: 80vh;">
