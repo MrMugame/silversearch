@@ -182,15 +182,15 @@
                     {/if}
                 {/snippet}
             </ResultContainer>
+        {:else}
+            {#if !searching && query.text}
+                <ResultApology/>
+            {:else if !searching}
+                <SearchTips/>
+            {:else if searching}
+                <SearchApology/>
+            {/if}
         {/each}
-
-        {#if !results.length && !searching && query.text}
-            <ResultApology/>
-        {:else if !results.length && !searching}
-            <SearchTips/>
-        {:else if !results.length && searching}
-            <SearchApology/>
-        {/if}
     </div>
 </dialog>
 
