@@ -73,6 +73,7 @@ config.set {
 Silversearch makes an effort to support as many languages as possible, which isn't always possible. RTL languages for example aren't really supported by Silverbullet and thus it also doesn't make sense for Silversearch to support them. Most Latin languages work well out of the box, like English, German, French, etc. Other languages like Chinese don't work so well by default, because the tokenization (i.e. the breaking of text into smaller sections, which are later compared, generally "words") is way more complex than in English. This can be improved by installing a purpose build tokenizer. Available tokenizers are lisited below. If you are missing a tokenizer, you can implement your own, the description of the api can be found in the [API](#API) section.
 
 - [Chinese (using `jieba-wasm`)](https://github.com/LelouchHe/silversearch-chinese-tokenizer)
+- [Japanese (bi-gram, no dictionary)](https://github.com/rinoshiyo/silversearch-japanese-tokenizer)
 
 ## API
 To integrate Silversearch with SpaceLua, use the following syscalls:
