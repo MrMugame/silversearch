@@ -1,7 +1,7 @@
 import { SearchMatch } from "../../shared/global";
 import { excerptAfter } from "./global";
 
-const japaneseDiacritics = ['\\u30FC', '\\u309A', '\\u3099'];
+const japaneseDiacritics = ['\\u30FC', '\\u309A', '\\u3099', '\\uFF70', '\\uFF9E', '\\uFF9F'];
 const regexpExclude = japaneseDiacritics.join('|');
 const diacriticsRegex = new RegExp(`(?!${regexpExclude})\\p{Diacritic}`, 'gu');
 
