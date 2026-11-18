@@ -1,17 +1,67 @@
-/* Some adjustments cause the enviornment is a little different */
-html, body {
+/*
+ * The panel iframe only gets the active theme's own styles, not SilverBullet's
+ * core stylesheet. These are the tokens this modal uses, with SilverBullet's
+ * defaults as the fallback. Themes and space styles override them when present.
+ */
+
+:where(html) {
+    --ui-font: Inter, system-ui, sans-serif;
+    --ui-radius-md: 8px;
+    --ui-radius-xl: 12px;
+    --ui-radius-pill: 99px;
+
+    --root-background-color: #fcfcfd;
+    --root-color: #1f2330;
+    --subtle-color: #6e7485;
+    --subtle-background-color: rgba(31, 35, 48, 0.05);
+    --ui-surface-border-color: #e4e6ee;
+    --ui-accent-color: #0059b8;
+    --highlight-color: color-mix(in srgb, #f5c518 32%, transparent);
+
+    --ui-label-color: color-mix(in oklab, var(--root-color), var(--subtle-color) 25%);
+    --ui-accent-text-color: color-mix(in oklab, var(--ui-accent-color), var(--root-color) 15%);
+    --tone-accent-soft: color-mix(in srgb, var(--ui-accent-color) 14%, transparent);
+
+    --progress-background-color: var(--ui-surface-border-color);
+    --progress-index-color: var(--ui-accent-color);
+    --editor-caret-color: var(--ui-accent-color);
+    --editor-highlight-background-color: var(--highlight-color);
+
+    --modal-color: var(--root-color);
+    --modal-background-color: var(--root-background-color);
+    --modal-border-color: var(--ui-surface-border-color);
+    --modal-backdrop-color: rgba(20, 22, 40, 0.18);
+    --modal-shadow-color: rgba(20, 22, 40, 0.2);
+    --modal-header-label-color: var(--ui-label-color);
+    --modal-description-color: var(--subtle-color);
+    --modal-help-color: var(--subtle-color);
+    --modal-selected-option-color: var(--ui-accent-text-color);
+    --modal-selected-option-background-color: var(--tone-accent-soft);
+    --modal-selected-option-description-color: var(--ui-accent-text-color);
+}
+
+:where(html[data-sb-scheme="dark"], html[data-theme="dark"]) {
+    --root-background-color: #15171e;
+    --root-color: #e3e5ec;
+    --subtle-color: #8c92a3;
+    --subtle-background-color: rgba(227, 229, 236, 0.06);
+    --ui-surface-border-color: #2a2e3a;
+    --ui-accent-color: #5b7cf0;
+
+    --ui-accent-text-color: color-mix(in oklab, var(--ui-accent-color), var(--root-color) 35%);
+    --tone-accent-soft: color-mix(in srgb, var(--ui-accent-color) 22%, transparent);
+
+    --modal-background-color: color-mix(in srgb, var(--ui-accent-color) 6%, var(--root-background-color));
+    --modal-backdrop-color: rgba(0, 0, 0, 0.5);
+    --modal-shadow-color: rgba(0, 0, 0, 0.55);
+}
+
+html,
+body {
     background: none !important;
-    --silversearch-progress-bar-color: var(--ui-accent-text-color);
 }
 
-* {
+body {
+    margin: 0;
     font-family: var(--ui-font);
-}
-
-code {
-    font-family: monospace;
-}
-
-.silversearch-highlight {
-    background-color: color-mix(in srgb, var(--editor-highlight-background-color), 50% transparent);
 }

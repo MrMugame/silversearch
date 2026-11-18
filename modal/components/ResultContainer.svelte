@@ -22,13 +22,13 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-    class="sb-option"
+    class="silversearch-option"
     class:silversearch-selected={selected}
     {onclick}
     {onmousemove}
 >
     {#if title || info}
-        <div class="sb-name">
+        <div class="silversearch-name">
             {#if title}
                 <span class="silversearch-title">{@render title()}</span>
             {/if}
@@ -37,38 +37,66 @@
             {/if}
         </div>
     {/if}
-    <div class="sb-description">
+    <div class="silversearch-description">
         {@render description()}
     </div>
 </div>
 
 <style>
-    .sb-description {
+    .silversearch-option {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 8px;
+        border-radius: var(--ui-radius-md);
+        cursor: pointer;
+    }
+
+    .silversearch-option:hover:not(.silversearch-selected) {
+        background-color: var(--subtle-background-color);
+    }
+
+    .silversearch-name {
+        display: flex;
+        align-items: baseline;
+        gap: 1ch;
+        min-width: 0;
+    }
+
+    .silversearch-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .silversearch-info {
+        flex: none;
+        color: var(--modal-description-color);
+        font-size: 0.75em;
+    }
+
+    .silversearch-description {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 3;
         line-clamp: 3;
         overflow: hidden;
-    }
-
-    .sb-name {
-        display: flex;
-        white-space: nowrap;
-        align-items: baseline;
-    }
-
-    .silversearch-info {
-        font-size: 0.8rem;
-        margin-left: 1ch;
         color: var(--modal-description-color);
+        font-size: 0.75em;
+        line-height: 1.5;
     }
 
-    .silversearch-title {
-        text-overflow: ellipsis;
-        overflow: hidden;
+    .silversearch-selected {
+        color: var(--modal-selected-option-color);
+        background-color: var(--modal-selected-option-background-color);
     }
 
-    :global(.silversearch-selected) {
-        background-color: var(--editor-selection-background-color);
+    .silversearch-selected .silversearch-info,
+    .silversearch-selected .silversearch-description {
+        color: var(--modal-selected-option-description-color);
+    }
+
+    :global(.silversearch-highlight) {
+        background-color: var(--editor-highlight-background-color);
     }
 </style>

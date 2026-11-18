@@ -137,7 +137,7 @@
 <svelte:window onclick={onClickWindow} />
 
 <dialog
-    class="sb-modal-box"
+    class="silversearch-modal-box"
     oncancel={(e: Event) => {
         e.preventDefault();
         syscall("editor.hidePanel", "modal");
@@ -147,21 +147,21 @@
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
-        class="sb-header"
+        class="silversearch-header"
         onclick={(e: Event) => e.stopPropagation()}
         onkeydown={onKeyDown}
     >
         <label for="mini-editor">Search</label>
         <input
             id="mini-editor"
-            class="sb-input"
+            class="silversearch-input"
             placeholder="Search with Silversearch"
             autocomplete="off"
             bind:value={query.text}
         />
     </div>
-    <div class="sb-help-text">{@render helpText()}</div>
-    <div class="sb-result-list" style="max-height: 80vh;">
+    <div class="silversearch-help-text">{@render helpText()}</div>
+    <div class="silversearch-result-list">
         {#each results as result, i}
             <ResultContainer
                 selected={i === selectedIndex}
@@ -196,19 +196,63 @@
 
 <style>
     dialog {
+        margin-top: 60px;
+        padding: 0;
+        width: 700px;
+        max-width: 90%;
+        box-sizing: border-box;
+        overflow: hidden;
+        color: var(--modal-color);
+        background-color: var(--modal-background-color);
+        border: 1px solid var(--modal-border-color);
+        border-radius: var(--ui-radius-xl);
+        box-shadow: 0 24px 60px var(--modal-shadow-color);
         outline: none;
     }
 
-    #mini-editor {
-        caret-color: var(--editor-caret-color);
-        outline: none;
-        border: none;
-        padding: 2px 0 0 3px;
-        line-height: 1.4;
-        width: 100%;
+    dialog::backdrop {
+        background-color: var(--modal-backdrop-color);
+    }
+
+    .silversearch-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 10px 10px;
+    }
+
+    .silversearch-header label {
+        color: var(--modal-header-label-color);
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .silversearch-input {
+        flex: 1;
+        min-width: 0;
+        padding: 0;
         background: none;
-        font-family: var(--ui-font);
-        font-size: 1em;
+        border: 0;
+        outline: none;
         color: inherit;
+        font: inherit;
+        caret-color: var(--editor-caret-color);
+    }
+
+    .silversearch-input::placeholder {
+        color: var(--modal-description-color);
+    }
+
+    .silversearch-help-text {
+        padding: 0 10px 8px;
+        color: var(--modal-help-color);
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .silversearch-result-list {
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 2px 8px 8px;
     }
 </style>

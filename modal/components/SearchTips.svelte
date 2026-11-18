@@ -24,18 +24,19 @@
 
 <style>
     .silversearch-help {
-        padding: 8px;
-        line-height: 1.5;
+        padding: 8px 18px;
         color: var(--modal-help-color);
+        font-size: 12px;
+        line-height: 1.5;
     }
 
-    .silversearch-help p {
-        margin: 0px;
+    p,
+    ul {
+        margin: 0;
     }
 
-    .silversearch-help ul {
-        margin: 0px;
+    ul {
+        padding-left: 1.2em;
         list-style-position: inside;
-        padding-left: 15px;
     }
 </style>

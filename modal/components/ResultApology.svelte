@@ -7,7 +7,9 @@
 
 <style>
     .silversearch-apology {
+        margin: 0;
+        padding: 1em;
+        color: var(--modal-help-color);
         text-align: center;
-        padding: 5px;
     }
 </style>

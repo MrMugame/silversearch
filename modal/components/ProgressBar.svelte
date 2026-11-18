@@ -12,22 +12,22 @@
 
 <style>
     .container {
-        background: var(--progress-background-color);
         position: relative;
         width: 300px;
-        height: 8px;
-        margin: 1rem;
-        border-radius: 4px;
+        max-width: 100%;
+        height: 4px;
         overflow: hidden;
+        background-color: var(--progress-background-color);
+        border-radius: var(--ui-radius-pill);
     }
 
     .bar {
-        background: var(--silversearch-progress-bar-color);
         position: absolute;
+        left: 0;
         height: 100%;
-        left: 0px;
-        border-radius: 4px;
-        transition: width 0.3s ease;
+        background-color: var(--progress-index-color);
+        border-radius: var(--ui-radius-pill);
+        transition: width 150ms ease;
     }
 
     @keyframes -global-slide {

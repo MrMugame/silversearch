@@ -31,11 +31,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 0.5em;
         padding: 1em;
     }
 
-    .silversearch-apology p {
-        margin: 0px;
+    p {
+        margin: 0;
     }
 </style>
 
